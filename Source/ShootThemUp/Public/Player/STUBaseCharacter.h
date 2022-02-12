@@ -31,6 +31,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Movement")
 		bool isRunning = false;
 
+	UFUNCTION(BlueprintCallable, Category = "Movement")
+		float GetMovementDirection() const;
+
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
