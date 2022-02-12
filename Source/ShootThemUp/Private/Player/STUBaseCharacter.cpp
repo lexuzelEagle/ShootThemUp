@@ -5,7 +5,9 @@
 #include "Camera/CameraComponent.h"
 #include "Components/InputComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
+DEFINE_LOG_CATEGORY_STATIC(LogSTUBaseCharacter, All, All)
 
 // Sets default values
 ASTUBaseCharacter::ASTUBaseCharacter()
@@ -26,6 +28,8 @@ void ASTUBaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	MaxWalkSpeed = GetCharacterMovement()->MaxWalkSpeed;
+
 }
 
 // Called every frame
@@ -45,15 +49,34 @@ void ASTUBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	PlayerInputComponent->BindAxis("LookUp", this, &ASTUBaseCharacter::AddControllerPitchInput);
 	PlayerInputComponent->BindAxis("TurnAround", this, &ASTUBaseCharacter::AddControllerYawInput);
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ASTUBaseCharacter::Jump);
+	PlayerInputComponent->BindAction("Run", IE_Pressed, this, &ASTUBaseCharacter::RunPressed);
+	PlayerInputComponent->BindAction("Run", IE_Released, this, &ASTUBaseCharacter::RunReleased);
 }
 
 void ASTUBaseCharacter::MoveForward(float Amount)
 {
-	AddMovementInput(GetActorForwardVector(), Amount);
+	IsMovingForward = Amount > 0.0f;
+	AddMovementInput(GetActorForwardVector(), Amount * MoveSpeedMultiplier);
 }
 
 void ASTUBaseCharacter::MoveRight(float Amount)
 {
 	AddMovementInput(GetActorRightVector(), Amount);
+}
+
+void ASTUBaseCharacter::RunPressed()
+{
+	if (!IsMovingForward) return;
+
+	isRunning = true;
+	GetCharacterMovement()->MaxWalkSpeed = MaxWalkSpeed * MoveSpeedMultiplier;
+	UE_LOG(LogSTUBaseCharacter, Error, TEXT("Shift is pressed. MaxWalkSpeed = %f"), GetCharacterMovement()->MaxWalkSpeed);
+}
+
+void ASTUBaseCharacter::RunReleased()
+{
+	isRunning = false;
+	GetCharacterMovement()->MaxWalkSpeed = MaxWalkSpeed;
+	UE_LOG(LogSTUBaseCharacter, Error, TEXT("Shift is Released. MaxWalkSpeed = %f"), GetCharacterMovement()->MaxWalkSpeed);
 }
 
