@@ -8,6 +8,8 @@
 
 class UCameraComponent;
 class USpringArmComponent;
+class USTUHealthComponent;
+class UTextRenderComponent;
 
 UCLASS()
 class SHOOTTHEMUP_API ASTUBaseCharacter : public ACharacter
@@ -19,17 +21,29 @@ public:
 	ASTUBaseCharacter();
 
 protected:
+	/* Properies Components */
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 		USpringArmComponent* SpringArmComponent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 		UCameraComponent* CameraComponent;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+		USTUHealthComponent* HealthComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+		UTextRenderComponent* HealthTextComponent;
+
+	/* Properies Movement */
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Movement")
 		float MoveSpeedMultiplier = 2.0f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Movement")
 		bool isRunning = false;
+
+
 
 	UFUNCTION(BlueprintCallable, Category = "Movement")
 		float GetMovementDirection() const;

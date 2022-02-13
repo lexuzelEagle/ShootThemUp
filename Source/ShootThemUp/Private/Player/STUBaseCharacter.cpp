@@ -6,6 +6,8 @@
 #include "Components/InputComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Player/STUHealthComponent.h"
+#include "Components/TextRenderComponent.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogSTUBaseCharacter, All, All)
 
@@ -16,11 +18,20 @@ ASTUBaseCharacter::ASTUBaseCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 
 	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>("SpringArmComponent");
+	check(SpringArmComponent);
+	check(GetRootComponent());
 	SpringArmComponent->SetupAttachment(GetRootComponent());
 	SpringArmComponent->bUsePawnControlRotation = true;
 
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>("CameraComponent");
+	check(CameraComponent);
 	CameraComponent->SetupAttachment(SpringArmComponent);
+
+	HealthComponent = CreateDefaultSubobject<USTUHealthComponent>("HealthComponent");
+	check(HealthComponent);
+	HealthTextComponent = CreateDefaultSubobject<UTextRenderComponent>("HealthTextComponent");
+	check(HealthTextComponent);
+	HealthTextComponent->SetupAttachment(GetRootComponent());
 }
 
 float ASTUBaseCharacter::GetMovementDirection() const
@@ -39,8 +50,8 @@ void ASTUBaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	check(GetCharacterMovement());
 	MaxWalkSpeed = GetCharacterMovement()->MaxWalkSpeed;
-
 }
 
 // Called every frame
@@ -48,12 +59,15 @@ void ASTUBaseCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	const auto Health = HealthComponent->GetHealth();
+	HealthTextComponent->SetText(FText::FromString(FString::Printf(TEXT("%.1f"), Health)));
 }
 
 // Called to bind functionality to input
 void ASTUBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	check(PlayerInputComponent);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &ASTUBaseCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ASTUBaseCharacter::MoveRight);
@@ -67,11 +81,13 @@ void ASTUBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 void ASTUBaseCharacter::MoveForward(float Amount)
 {
 	IsMovingForward = Amount > 0.0f;
-	AddMovementInput(GetActorForwardVector(), Amount * MoveSpeedMultiplier);
+	AddMovementInput(GetActorForwardVector(), Amount);
 }
 
 void ASTUBaseCharacter::MoveRight(float Amount)
 {
+	if (isRunning) return;
+
 	AddMovementInput(GetActorRightVector(), Amount);
 }
 
