@@ -61,6 +61,8 @@ void ASTUBaseCharacter::Tick(float DeltaTime)
 
 	const auto Health = HealthComponent->GetHealth();
 	HealthTextComponent->SetText(FText::FromString(FString::Printf(TEXT("%.1f"), Health)));
+
+	TakeDamage(0.1f, FDamageEvent(), Controller, this);
 }
 
 // Called to bind functionality to input
@@ -104,6 +106,6 @@ void ASTUBaseCharacter::RunReleased()
 {
 	isRunning = false;
 	GetCharacterMovement()->MaxWalkSpeed = MaxWalkSpeed;
-	UE_LOG(LogSTUBaseCharacter, Error, TEXT("Shift is Released. MaxWalkSpeed = %f"), GetCharacterMovement()->MaxWalkSpeed);
+//	UE_LOG(LogSTUBaseCharacter, Error, TEXT("Shift is Released. MaxWalkSpeed = %f"), GetCharacterMovement()->MaxWalkSpeed);
 }
 

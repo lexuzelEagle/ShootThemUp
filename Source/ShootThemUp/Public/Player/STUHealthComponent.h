@@ -25,4 +25,7 @@ protected:
 
 private:
 	float Health;
+
+	UFUNCTION(BlueprintCallable, Category = "Damage")
+		void OnTakeDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
 };
