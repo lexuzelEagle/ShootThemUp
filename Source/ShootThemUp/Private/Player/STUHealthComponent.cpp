@@ -22,6 +22,7 @@ void USTUHealthComponent::BeginPlay()
 	Super::BeginPlay();
 
 	Health = MaxHealth;
+	OnHealthChanged.Broadcast(Health);
 
 	AActor* ComponentOwner = GetOwner();
 	check(ComponentOwner);
@@ -30,7 +31,16 @@ void USTUHealthComponent::BeginPlay()
 
 void USTUHealthComponent::OnTakeDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
 {
-	Health -= Damage;
+	if (Damage <= 0.0f || IsDead()) return;
+
+	Health = FMath::Clamp(Health - Damage, 0.0f, MaxHealth);
+	OnHealthChanged.Broadcast(Health);
+
+	if (IsDead())
+	{
+		OnDeath.Broadcast();
+	}
+
 	UE_LOG(LogHealthComponent, Display, TEXT("Taken Damage = %.1f"), Damage);
 
 	if (DamageType)

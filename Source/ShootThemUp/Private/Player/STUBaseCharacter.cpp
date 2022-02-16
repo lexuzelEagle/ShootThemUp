@@ -52,15 +52,16 @@ void ASTUBaseCharacter::BeginPlay()
 
 	check(GetCharacterMovement());
 	MaxWalkSpeed = GetCharacterMovement()->MaxWalkSpeed;
+
+	HealthComponent->OnDeath.AddUObject(this, &ASTUBaseCharacter::OnDeath);
+	HealthComponent->OnHealthChanged.AddUObject(this, &ASTUBaseCharacter::OnHealthChanged);
+	OnHealthChanged(HealthComponent->GetHealth());
 }
 
 // Called every frame
 void ASTUBaseCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	const auto Health = HealthComponent->GetHealth();
-	HealthTextComponent->SetText(FText::FromString(FString::Printf(TEXT("%.1f"), Health)));
 
 //	TakeDamage(0.1f, FDamageEvent(), Controller, this);
 }
@@ -107,5 +108,20 @@ void ASTUBaseCharacter::RunReleased()
 	isRunning = false;
 	GetCharacterMovement()->MaxWalkSpeed = MaxWalkSpeed;
 //	UE_LOG(LogSTUBaseCharacter, Error, TEXT("Shift is Released. MaxWalkSpeed = %f"), GetCharacterMovement()->MaxWalkSpeed);
+}
+
+void ASTUBaseCharacter::OnDeath()
+{
+	UE_LOG(LogSTUBaseCharacter, Error, TEXT("Character %s is DEAD!"), *GetName());
+
+	PlayAnimMontage(DeathAnimMontage);
+	GetCharacterMovement()->DisableMovement();
+
+	SetLifeSpan(5.0f);
+}
+
+void ASTUBaseCharacter::OnHealthChanged(float Health)
+{
+	HealthTextComponent->SetText(FText::FromString(FString::Printf(TEXT("%.1f"), Health)));
 }
 

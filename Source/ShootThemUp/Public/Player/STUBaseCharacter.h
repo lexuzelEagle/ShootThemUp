@@ -43,6 +43,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Movement")
 		bool isRunning = false;
 
+	/* Animation */
+	UPROPERTY(EditDefaultsOnly, Category = "Animation")
+		UAnimMontage* DeathAnimMontage;
 
 
 	UFUNCTION(BlueprintCallable, Category = "Movement")
@@ -66,5 +69,8 @@ private:
 	void MoveRight(float Amount);
 	void RunPressed();
 	void RunReleased();
+
+	void OnDeath();
+	void OnHealthChanged(float Health);
 
 };
