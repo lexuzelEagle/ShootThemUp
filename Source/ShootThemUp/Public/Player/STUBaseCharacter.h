@@ -10,7 +10,7 @@ class UCameraComponent;
 class USpringArmComponent;
 class USTUHealthComponent;
 class UTextRenderComponent;
-class ASTUBaseWeapon;
+class UWeaponComponent;
 
 UCLASS()
 class SHOOTTHEMUP_API ASTUBaseCharacter : public ACharacter
@@ -36,6 +36,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 		UTextRenderComponent* HealthTextComponent;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+		UWeaponComponent* WeaponComponent;
+
 	/* Properies Movement */
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Movement")
@@ -57,12 +60,6 @@ protected:
 
 	UFUNCTION(BlueprintCallable, Category = "Damage")
 		float GetMovementDirection() const;
-
-	/* Weapon */
-
-	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
-		TSubclassOf<ASTUBaseWeapon> WeaponClass;
-
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -88,6 +85,4 @@ private:
 
 	UFUNCTION()
 	void OnGroundLanded(const FHitResult& Hit);
-
-	void SpawnWeapon();
 };

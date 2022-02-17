@@ -25,5 +25,5 @@ protected:
 		USkeletalMeshComponent* WeaponMesh;
 
 public:	
-
+	virtual void Fire();
 };
