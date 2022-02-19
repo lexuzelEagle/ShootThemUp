@@ -29,43 +29,20 @@ void ASTUBaseWeapon::BeginPlay()
 
 void ASTUBaseWeapon::FireStart()
 {
-	UE_LOG(LogBaseWeapon, Display, TEXT("Fire!"));
-	MakeShot();
-	GetWorldTimerManager().SetTimer(ShotTimerHandle, this, &ASTUBaseWeapon::MakeShot, TimeBetweenShots, true);
 }
 
 void ASTUBaseWeapon::FireStop()
 {
-	GetWorldTimerManager().ClearTimer(ShotTimerHandle);
 }
 
 void ASTUBaseWeapon::MakeShot()
 {
 	check(GetWorld());
 
-	const auto Player = Cast<ACharacter>(GetOwner());
-	check(Player);
-
-	const auto Controller = Player->GetController<APlayerController>();
-	check(Controller);
-
-	FVector ViewLocation;
-	FRotator ViewRotation;
-	Controller->GetPlayerViewPoint(ViewLocation, ViewRotation);
+	FVector TraceStart, TraceEnd;
+	if (!GetTraceData(TraceStart, TraceEnd)) return;
 
 	const FTransform SocketTransform = WeaponMesh->GetSocketTransform(MuzzleSocketName);
-
-//	const FVector TraceStart = SocketTransform.GetLocation();
-	const FVector TraceStart = ViewLocation;
-
-//	const FVector ShootDirection = SocketTransform.GetRotation().GetForwardVector();
-	const auto HalfRad = FMath::DegreesToRadians(BulletSpread);
-	const FVector ShootDirection = FMath::VRandCone(ViewRotation.Vector(), HalfRad);
-
-	const FVector TraceEnd = TraceStart + ShootDirection * TraceMaxDistance;
-
-//	DrawDebugLine(GetWorld(), TraceStart, TraceEnd, FColor::Red, false, 5.0f, 0, 3.0f);
-
 	FCollisionQueryParams CollisionParams;
 	CollisionParams.AddIgnoredActor(GetOwner());
 	FHitResult HitResult;
@@ -88,9 +65,26 @@ void ASTUBaseWeapon::MakeShot()
 
 void ASTUBaseWeapon::DealDamage(const FHitResult& HitResult)
 {
-	const auto Victim = HitResult.GetActor();
-	check(Victim);
+}
 
-	Victim->TakeDamage(WeaponDamage, FDamageEvent(), nullptr, GetOwner());
-	UE_LOG(LogBaseWeapon, Display, TEXT("%s caused %f Damage to %s"), *GetOwner()->GetHumanReadableName(), WeaponDamage, *Victim->GetHumanReadableName());
+bool ASTUBaseWeapon::GetTraceData(FVector& TraceStart, FVector& TraceEnd)
+{
+	const auto Player = Cast<ACharacter>(GetOwner());
+	check(Player);
+
+	const auto Controller = Player->GetController<APlayerController>();
+	check(Controller);
+
+	FVector ViewLocation;
+	FRotator ViewRotation;
+	Controller->GetPlayerViewPoint(ViewLocation, ViewRotation);
+
+	TraceStart = ViewLocation;
+
+	const auto HalfRad = FMath::DegreesToRadians(BulletSpread);
+	const FVector ShootDirection = FMath::VRandCone(ViewRotation.Vector(), HalfRad);
+
+	TraceEnd = TraceStart + ShootDirection * TraceMaxDistance;
+
+	return true;
 }

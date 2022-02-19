@@ -19,7 +19,6 @@ public:
 
 	virtual void FireStart();
 	virtual void FireStop();
-	void MakeShot();
 
 protected:
 	// Called when the game starts or when spawned
@@ -38,14 +37,12 @@ protected:
 		float WeaponDamage = 2.0f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-		float TimeBetweenShots = 0.1f;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		float BulletSpread = 1.0f;
 
-private:	
-	
-	FTimerHandle ShotTimerHandle;
+	virtual void MakeShot();
+	virtual void DealDamage(const FHitResult& HitResult);
+	bool GetTraceData(FVector& TraceStart, FVector& TraceEnd);
 
-	void DealDamage(const FHitResult& HitResult);
+private:	
+
 };
