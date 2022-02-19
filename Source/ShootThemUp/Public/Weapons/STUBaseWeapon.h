@@ -17,6 +17,9 @@ public:
 	// Sets default values for this actor's properties
 	ASTUBaseWeapon();
 
+	virtual void Fire();
+	void MakeShot();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -30,7 +33,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		float TraceMaxDistance = 1500.0f;
 
-public:	
-	virtual void Fire();
-	void MakeShot();
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		float WeaponDamage = 10.0f;
+
+private:	
+	void DealDamage(const FHitResult& HitResult);
 };

@@ -70,6 +70,8 @@ void ASTUBaseWeapon::MakeShot()
 		DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 10.0f, 24, FColor::Blue, false, 5.0f);
 
 		UE_LOG(LogBaseWeapon, Display, TEXT("Bone = %s"), *HitResult.BoneName.ToString());
+
+		DealDamage(HitResult);
 	}
 	else
 	{
@@ -77,3 +79,11 @@ void ASTUBaseWeapon::MakeShot()
 	}
 }
 
+void ASTUBaseWeapon::DealDamage(const FHitResult& HitResult)
+{
+	const auto Victim = HitResult.GetActor();
+	check(Victim);
+
+	Victim->TakeDamage(WeaponDamage, FDamageEvent(), nullptr, GetOwner());
+	UE_LOG(LogBaseWeapon, Display, TEXT("%s caused %f Damage to %s"), *GetOwner()->GetHumanReadableName(), WeaponDamage, *Victim->GetHumanReadableName());
+}
