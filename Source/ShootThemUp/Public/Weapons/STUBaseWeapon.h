@@ -17,7 +17,8 @@ public:
 	// Sets default values for this actor's properties
 	ASTUBaseWeapon();
 
-	virtual void Fire();
+	virtual void FireStart();
+	virtual void FireStop();
 	void MakeShot();
 
 protected:
@@ -31,11 +32,20 @@ protected:
 		FName MuzzleSocketName = "MuzzleSocket";
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-		float TraceMaxDistance = 1500.0f;
+		float TraceMaxDistance = 5000.0f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-		float WeaponDamage = 10.0f;
+		float WeaponDamage = 2.0f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		float TimeBetweenShots = 0.1f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		float BulletSpread = 1.0f;
 
 private:	
+	
+	FTimerHandle ShotTimerHandle;
+
 	void DealDamage(const FHitResult& HitResult);
 };
