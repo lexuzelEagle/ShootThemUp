@@ -9,6 +9,18 @@
 class ASTUBaseWeapon;
 class ASTUBaseCharacter;
 
+USTRUCT(BlueprintType)
+struct FWeaponData
+{
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
+		TSubclassOf<ASTUBaseWeapon> WeaponClass;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon", meta = (EditCondition = "!Infinite"))
+		UAnimMontage* ReloadAnimMontage;
+};
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class SHOOTTHEMUP_API UWeaponComponent : public UActorComponent
 {
@@ -21,11 +33,12 @@ public:
 	void FireStart();
 	void FireStop();
 	void NextWeapon();
+	void Reload();
 
 protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
-		TArray<TSubclassOf<ASTUBaseWeapon>> WeaponClasses;
+		TArray<FWeaponData> WeaponData;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
 		FName WeaponEquipSocket = "WeaponSocket";
@@ -36,6 +49,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Animation")
 		UAnimMontage* EquipAnimMontage;
 
+	
 	// Called when the game starts
 	virtual void BeginPlay() override;
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
@@ -43,6 +57,9 @@ protected:
 private:	
 	UPROPERTY()
 		ASTUBaseWeapon* CurrentWeapon = nullptr;
+	
+	UPROPERTY()
+		UAnimMontage* CurrentReloadAnimMontage = nullptr;
 
 	UPROPERTY()
 		TArray<ASTUBaseWeapon*> Weapons;
@@ -52,6 +69,7 @@ private:
 
 	int32 CurrentWeaponIdx = 0;
 	bool EquipAnimationInProgress = false;
+	bool ReloadAnimationInProgress = false;
 
 	void SpawnWeapons();
 	void AttachWeaponToSocket(ASTUBaseWeapon* Weapon, const FName& SocketName);
