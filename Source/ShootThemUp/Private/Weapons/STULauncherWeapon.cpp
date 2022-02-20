@@ -19,13 +19,25 @@ void ASTULauncherWeapon::FireStop()
 
 void ASTULauncherWeapon::MakeShot()
 {
+	check(GetWorld());
+
+	FVector TraceStart, TraceEnd;
+	if (!GetTraceData(TraceStart, TraceEnd)) return;
+
+	FCollisionQueryParams CollisionParams;
+	CollisionParams.AddIgnoredActor(GetOwner());
+	FHitResult HitResult;
+	GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECollisionChannel::ECC_Visibility, CollisionParams);
+
 	const FTransform SocketTransform = WeaponMesh->GetSocketTransform(MuzzleSocketName);
+	const FVector EndPoint = HitResult.bBlockingHit ? HitResult.ImpactPoint : TraceEnd;
+	const FVector Direction = (EndPoint - SocketTransform.GetLocation()).GetSafeNormal();
 
 	const FTransform SpawnTransform(FRotator::ZeroRotator, SocketTransform.GetLocation());
-	AActor* Projectile = UGameplayStatics::BeginDeferredActorSpawnFromClass(GetWorld(), ProjectileClass, SpawnTransform);
-	// set projectile params
-
-	UGameplayStatics::FinishSpawningActor(Projectile, SpawnTransform);
+	ASTUProjectile* Projectile = GetWorld()->SpawnActorDeferred<ASTUProjectile>(ProjectileClass, SpawnTransform);
+	check(Projectile);
+	Projectile->SetShotDirection(Direction);
+	Projectile->FinishSpawning(SpawnTransform);
 }
 
 void ASTULauncherWeapon::DealDamage(const FHitResult& HitResult)
