@@ -78,7 +78,27 @@ private:
 	void PlayAnimMontage(UAnimMontage* Animation);
 	void InitAnimations();
 	void OnEquipFinished(USkeletalMeshComponent* MeshComponent);
+	void OnReloadFinished(USkeletalMeshComponent* MeshComponent);
 
-	bool CanFire();
-	bool CanEquip() { return !EquipAnimationInProgress; };
+	bool CanFire() const;
+	bool CanEquip() const;
+	bool CanReload() const;
+
+	template<typename T>
+	T* FindNotifyByClass(UAnimSequenceBase* Animation)
+	{
+		check(Animation);
+
+		const auto NotifyEvents = Animation->Notifies;
+		for (auto NotifyEvent : NotifyEvents)
+		{
+			auto AnimNotify = Cast<T>(NotifyEvent.Notify);
+			if (AnimNotify)
+			{
+				return AnimNotify;
+			}
+		}
+
+		return nullptr;
+	}
 };

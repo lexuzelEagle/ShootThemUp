@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "Player/STUBaseCharacter.h"
 #include "Animations/STUEquipFinishedAnimNotify.h"
+#include "Animations/STUReloadFinishedAnimNotify.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogWeaponComponent, All, All)
 
@@ -98,17 +99,18 @@ void UWeaponComponent::EquipWeapon(int32 WeaponIndex)
 
 void UWeaponComponent::InitAnimations()
 {
-	check(EquipAnimMontage);
 
-	const auto NotifyEvents = EquipAnimMontage->Notifies;
-	for (auto NotifyEvent : NotifyEvents)
+	auto EquipFinishedNotify = FindNotifyByClass<USTUEquipFinishedAnimNotify>(EquipAnimMontage);
+	if (EquipFinishedNotify)
 	{
-		auto EquipFinishedNotify = Cast<USTUEquipFinishedAnimNotify>(NotifyEvent.Notify);
-		if (EquipFinishedNotify)
-		{
-			EquipFinishedNotify->OnNotified.AddUObject(this, &UWeaponComponent::OnEquipFinished);
-			break;
-		}
+		EquipFinishedNotify->OnNotified.AddUObject(this, &UWeaponComponent::OnEquipFinished);
+	}
+
+	for (auto OneWeaponData : WeaponData)
+	{
+		auto ReloadFinishedNotify = FindNotifyByClass<USTUReloadFinishedAnimNotify>(OneWeaponData.ReloadAnimMontage);	
+		if (!ReloadFinishedNotify) continue;		
+		ReloadFinishedNotify->OnNotified.AddUObject(this, &UWeaponComponent::OnReloadFinished);
 	}
 }
 
@@ -118,6 +120,15 @@ void UWeaponComponent::OnEquipFinished(USkeletalMeshComponent* MeshComponent)
 	{
 		EquipAnimationInProgress = false;
 		UE_LOG(LogWeaponComponent, Display, TEXT("Equip finished!"));
+	}
+}
+
+void UWeaponComponent::OnReloadFinished(USkeletalMeshComponent* MeshComponent)
+{
+	if (Character->GetMesh() == MeshComponent)
+	{
+		ReloadAnimationInProgress = false;
+		UE_LOG(LogWeaponComponent, Display, TEXT("Reload finished!"));
 	}
 }
 
@@ -142,6 +153,9 @@ void UWeaponComponent::NextWeapon()
 
 void UWeaponComponent::Reload()
 {
+	if (!CanReload()) return;
+
+	ReloadAnimationInProgress = true;
 	PlayAnimMontage(CurrentReloadAnimMontage);
 }
 
@@ -151,8 +165,18 @@ void UWeaponComponent::PlayAnimMontage(UAnimMontage* Animation)
 	Character->PlayAnimMontage(Animation);
 }
 
-bool UWeaponComponent::CanFire()
+bool UWeaponComponent::CanFire() const
 { 
 	check(Character);
 	return CurrentWeapon && !EquipAnimationInProgress && !ReloadAnimationInProgress && !Character->IsRunning();
 }
+
+bool UWeaponComponent::CanEquip() const
+{ 
+	return !EquipAnimationInProgress && !ReloadAnimationInProgress;
+};
+
+bool UWeaponComponent::CanReload() const
+{
+	return CanFire();
+};
