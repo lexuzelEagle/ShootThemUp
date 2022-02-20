@@ -22,7 +22,6 @@ protected:
 		TSubclassOf<ASTUProjectile> ProjectileClass;
 
 	virtual void MakeShot() override;
-	virtual void DealDamage(const FHitResult& HitResult) override;
 
 private:
 

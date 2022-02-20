@@ -8,7 +8,6 @@
 void ASTULauncherWeapon::FireStart()
 {
 	Super::FireStart();
-
 	MakeShot();
 }
 
@@ -19,6 +18,8 @@ void ASTULauncherWeapon::FireStop()
 
 void ASTULauncherWeapon::MakeShot()
 {
+	Super::MakeShot();
+
 	check(GetWorld());
 
 	FVector TraceStart, TraceEnd;
@@ -37,15 +38,6 @@ void ASTULauncherWeapon::MakeShot()
 	ASTUProjectile* Projectile = GetWorld()->SpawnActorDeferred<ASTUProjectile>(ProjectileClass, SpawnTransform);
 	check(Projectile);
 	Projectile->SetShotDirection(Direction);
+	Projectile->SetOwner(GetOwner());
 	Projectile->FinishSpawning(SpawnTransform);
-}
-
-void ASTULauncherWeapon::DealDamage(const FHitResult& HitResult)
-{
-	Super::DealDamage(HitResult);
-
-	const auto Victim = HitResult.GetActor();
-	check(Victim);
-
-	Victim->TakeDamage(WeaponDamage, FDamageEvent(), nullptr, GetOwner());
 }

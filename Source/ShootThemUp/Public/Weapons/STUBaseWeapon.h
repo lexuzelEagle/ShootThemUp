@@ -24,23 +24,19 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
 		USkeletalMeshComponent* WeaponMesh;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		FName MuzzleSocketName = "MuzzleSocket";
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		float TraceMaxDistance = 5000.0f;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-		float WeaponDamage = 2.0f;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		float BulletSpread = 1.0f;
 
 	virtual void MakeShot();
-	virtual void DealDamage(const FHitResult& HitResult);
 	bool GetTraceData(FVector& TraceStart, FVector& TraceEnd);
 
 private:	

@@ -19,11 +19,14 @@ public:
 	virtual void FireStop() override;
 	
 protected:
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		float TimeBetweenShots = 0.1f;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		float WeaponDamage = 2.0f;
+
 	virtual void MakeShot() override;
-	virtual void DealDamage(const FHitResult& HitResult) override;
+	void DealDamage(const FHitResult& HitResult);
 
 private:
 	FTimerHandle ShotTimerHandle;

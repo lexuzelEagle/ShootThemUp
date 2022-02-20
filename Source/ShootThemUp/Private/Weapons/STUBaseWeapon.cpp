@@ -37,34 +37,6 @@ void ASTUBaseWeapon::FireStop()
 
 void ASTUBaseWeapon::MakeShot()
 {
-	check(GetWorld());
-
-	FVector TraceStart, TraceEnd;
-	if (!GetTraceData(TraceStart, TraceEnd)) return;
-
-	const FTransform SocketTransform = WeaponMesh->GetSocketTransform(MuzzleSocketName);
-	FCollisionQueryParams CollisionParams;
-	CollisionParams.AddIgnoredActor(GetOwner());
-	FHitResult HitResult;
-	GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECollisionChannel::ECC_Visibility, CollisionParams);
-
-	if (HitResult.bBlockingHit)
-	{
-		DrawDebugLine(GetWorld(), SocketTransform.GetLocation(), HitResult.ImpactPoint, FColor::Red, false, 5.0f, 0, 3.0f);
-		DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 10.0f, 24, FColor::Blue, false, 5.0f);
-
-		UE_LOG(LogBaseWeapon, Display, TEXT("Bone = %s"), *HitResult.BoneName.ToString());
-
-		DealDamage(HitResult);
-	}
-	else
-	{
-		DrawDebugLine(GetWorld(), SocketTransform.GetLocation(), TraceEnd, FColor::Red, false, 5.0f, 0, 3.0f);
-	}
-}
-
-void ASTUBaseWeapon::DealDamage(const FHitResult& HitResult)
-{
 }
 
 bool ASTUBaseWeapon::GetTraceData(FVector& TraceStart, FVector& TraceEnd)

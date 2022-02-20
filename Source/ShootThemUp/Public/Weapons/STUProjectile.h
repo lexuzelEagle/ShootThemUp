@@ -26,9 +26,25 @@ protected:
 	UPROPERTY(VisibleDefaultsOnly, Category = "Weapon")
 		UProjectileMovementComponent* MovementComponent;
 
+	UPROPERTY(VisibleDefaultsOnly,BlueprintReadWrite, Category = "Weapon")
+		float DamageRadius = 200.0f;
+
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
+		float DamageAmount = 50.0f;
+
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
+		bool DoFullDamage = false;
+
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
+		float LifeTime = 5.0f;
+
 	virtual void BeginPlay() override;
 
 private:	
 	FVector ShotDirection;
+	
+	UFUNCTION()
+	void OnProjectileHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
+	AController* GetController() const;
 };
