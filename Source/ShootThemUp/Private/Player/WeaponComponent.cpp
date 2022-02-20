@@ -26,27 +26,65 @@ void UWeaponComponent::BeginPlay()
 
 	Character = Cast<ASTUBaseCharacter>(GetOwner());
 	check(Character);
-
-	SpawnWeapon();
 	
+	CurrentWeaponIdx = 0;
+
+	SpawnWeapons();
+	EquipWeapon(CurrentWeaponIdx);
 }
 
-void UWeaponComponent::SpawnWeapon()
+void UWeaponComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	CurrentWeapon = nullptr;
+
+	for (auto Weapon : Weapons)
+	{
+		Weapon->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+		Weapon->Destroy();
+	}
+	Weapons.Empty();
+
+	Super::EndPlay(EndPlayReason);
+}
+
+void UWeaponComponent::SpawnWeapons()
 {
 	check(GetWorld());
 
-	CurrentWeapon = GetWorld()->SpawnActor<ASTUBaseWeapon>(WeaponClass);
-	check(CurrentWeapon);
+	for (auto WeaponClass : WeaponClasses)
+	{
+		auto Weapon = GetWorld()->SpawnActor<ASTUBaseWeapon>(WeaponClass);
+		check(Weapon);
+		Weapon->SetOwner(Character);
+		Weapons.Add(Weapon);
+
+		AttachWeaponToSocket(Weapon, WeaponArmorySocket);
+	}
+}
+
+void UWeaponComponent::AttachWeaponToSocket(ASTUBaseWeapon* Weapon, const FName& SocketName)
+{
+	check(Weapon);
+	check(Character);
 	FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, false);
-	CurrentWeapon->AttachToComponent(Character->GetMesh(), AttachmentRules, WeaponSocket);
-	CurrentWeapon->SetOwner(Character);
+	Weapon->AttachToComponent(Character->GetMesh(), AttachmentRules, SocketName);
+}
+
+void UWeaponComponent::EquipWeapon(int32 WeaponIndex)
+{
+	if (CurrentWeapon)
+	{
+		CurrentWeapon->FireStop();
+		AttachWeaponToSocket(CurrentWeapon, WeaponArmorySocket);
+	}
+
+	CurrentWeapon = Weapons[WeaponIndex];
+	AttachWeaponToSocket(CurrentWeapon, WeaponEquipSocket);
 }
 
 void UWeaponComponent::FireStart()
 {
-	UE_LOG(LogWeaponComponent, Display, TEXT("Fire!!!"));
 	if (Character->IsRunning()) return;
-	UE_LOG(LogWeaponComponent, Display, TEXT("IsNotRunning"));
 
 	check(CurrentWeapon);
 
@@ -57,4 +95,10 @@ void UWeaponComponent::FireStop()
 {
 	check(CurrentWeapon);
 	CurrentWeapon->FireStop();
+}
+
+void UWeaponComponent::NextWeapon()
+{
+	CurrentWeaponIdx = (CurrentWeaponIdx + 1) % Weapons.Num();
+	EquipWeapon(CurrentWeaponIdx);
 }
