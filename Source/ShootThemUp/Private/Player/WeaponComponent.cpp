@@ -75,6 +75,8 @@ void UWeaponComponent::AttachWeaponToSocket(ASTUBaseWeapon* Weapon, const FName&
 
 void UWeaponComponent::EquipWeapon(int32 WeaponIndex)
 {
+	if (!CanEquip()) return;
+
 	if (CurrentWeapon)
 	{
 		CurrentWeapon->FireStop();
@@ -83,6 +85,7 @@ void UWeaponComponent::EquipWeapon(int32 WeaponIndex)
 
 	CurrentWeapon = Weapons[WeaponIndex];
 	AttachWeaponToSocket(CurrentWeapon, WeaponEquipSocket);
+	EquipAnimationInProgress = true;
 	PlayAnimMontage(EquipAnimMontage);
 }
 
@@ -106,15 +109,14 @@ void UWeaponComponent::OnEquipFinished(USkeletalMeshComponent* MeshComponent)
 {
 	if (Character->GetMesh() == MeshComponent)
 	{
+		EquipAnimationInProgress = false;
 		UE_LOG(LogWeaponComponent, Display, TEXT("Equip finished!"));
 	}
 }
 
 void UWeaponComponent::FireStart()
 {
-	if (Character->IsRunning()) return;
-
-	check(CurrentWeapon);
+	if (!CanFire()) return;
 
 	CurrentWeapon->FireStart();
 }
@@ -135,4 +137,10 @@ void UWeaponComponent::PlayAnimMontage(UAnimMontage* Animation)
 {
 	check(Character);
 	Character->PlayAnimMontage(Animation);
+}
+
+bool UWeaponComponent::CanFire()
+{ 
+	check(Character);
+	return CurrentWeapon && !EquipAnimationInProgress && !Character->IsRunning();
 }

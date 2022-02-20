@@ -51,6 +51,7 @@ private:
 		ASTUBaseCharacter* Character = nullptr;
 
 	int32 CurrentWeaponIdx = 0;
+	bool EquipAnimationInProgress = false;
 
 	void SpawnWeapons();
 	void AttachWeaponToSocket(ASTUBaseWeapon* Weapon, const FName& SocketName);
@@ -59,4 +60,7 @@ private:
 	void PlayAnimMontage(UAnimMontage* Animation);
 	void InitAnimations();
 	void OnEquipFinished(USkeletalMeshComponent* MeshComponent);
+
+	bool CanFire();
+	bool CanEquip() { return !EquipAnimationInProgress; };
 };
