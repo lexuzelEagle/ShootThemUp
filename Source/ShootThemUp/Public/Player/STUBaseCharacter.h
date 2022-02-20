@@ -21,6 +21,9 @@ public:
 	// Sets default values for this character's properties
 	ASTUBaseCharacter();
 
+	UFUNCTION(BlueprintCallable)
+	bool IsRunning() const { return IsAboutToRun && !GetVelocity().IsZero(); };
+
 protected:
 	/* Properies Components */
 
@@ -45,7 +48,7 @@ protected:
 		float MoveSpeedMultiplier = 2.0f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Movement")
-		bool isRunning = false;
+		bool IsAboutToRun = false;
 
 	/* Animation */
 	UPROPERTY(EditDefaultsOnly, Category = "Animation")

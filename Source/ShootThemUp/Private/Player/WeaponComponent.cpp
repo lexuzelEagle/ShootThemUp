@@ -4,6 +4,9 @@
 #include "Player/WeaponComponent.h"
 #include "Weapons/STUBaseWeapon.h"
 #include "GameFramework/Character.h"
+#include "Player/STUBaseCharacter.h"
+
+DEFINE_LOG_CATEGORY_STATIC(LogWeaponComponent, All, All)
 
 // Sets default values for this component's properties
 UWeaponComponent::UWeaponComponent()
@@ -21,6 +24,9 @@ void UWeaponComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
+	Character = Cast<ASTUBaseCharacter>(GetOwner());
+	check(Character);
+
 	SpawnWeapon();
 	
 }
@@ -28,9 +34,6 @@ void UWeaponComponent::BeginPlay()
 void UWeaponComponent::SpawnWeapon()
 {
 	check(GetWorld());
-
-	ACharacter* Character = Cast<ACharacter>(GetOwner());
-	check(Character);
 
 	CurrentWeapon = GetWorld()->SpawnActor<ASTUBaseWeapon>(WeaponClass);
 	check(CurrentWeapon);
@@ -41,6 +44,10 @@ void UWeaponComponent::SpawnWeapon()
 
 void UWeaponComponent::FireStart()
 {
+	UE_LOG(LogWeaponComponent, Display, TEXT("Fire!!!"));
+	if (Character->IsRunning()) return;
+	UE_LOG(LogWeaponComponent, Display, TEXT("IsNotRunning"));
+
 	check(CurrentWeapon);
 
 	CurrentWeapon->FireStart();

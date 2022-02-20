@@ -7,6 +7,7 @@
 #include "WeaponComponent.generated.h"
 
 class ASTUBaseWeapon;
+class ASTUBaseCharacter;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class SHOOTTHEMUP_API UWeaponComponent : public UActorComponent
@@ -34,6 +35,9 @@ protected:
 private:	
 	UPROPERTY()
 		ASTUBaseWeapon* CurrentWeapon = nullptr;
+
+	UPROPERTY()
+		ASTUBaseCharacter* Character = nullptr;
 
 	void SpawnWeapon();
 };

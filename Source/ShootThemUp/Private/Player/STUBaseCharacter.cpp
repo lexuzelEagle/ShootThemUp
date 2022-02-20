@@ -93,30 +93,27 @@ void ASTUBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 void ASTUBaseCharacter::MoveForward(float Amount)
 {
 	IsMovingForward = Amount > 0.0f;
+
+	if (IsRunning() && !IsMovingForward) RunReleased();
+
 	AddMovementInput(GetActorForwardVector(), Amount);
 }
 
 void ASTUBaseCharacter::MoveRight(float Amount)
 {
-	if (isRunning) return;
-
 	AddMovementInput(GetActorRightVector(), Amount);
 }
 
 void ASTUBaseCharacter::RunPressed()
 {
-	if (!IsMovingForward) return;
-
-	isRunning = true;
+	IsAboutToRun = true;
 	GetCharacterMovement()->MaxWalkSpeed = MaxWalkSpeed * MoveSpeedMultiplier;
-	UE_LOG(LogSTUBaseCharacter, Error, TEXT("Shift is pressed. MaxWalkSpeed = %f"), GetCharacterMovement()->MaxWalkSpeed);
 }
 
 void ASTUBaseCharacter::RunReleased()
 {
-	isRunning = false;
+	IsAboutToRun = false;
 	GetCharacterMovement()->MaxWalkSpeed = MaxWalkSpeed;
-//	UE_LOG(LogSTUBaseCharacter, Error, TEXT("Shift is Released. MaxWalkSpeed = %f"), GetCharacterMovement()->MaxWalkSpeed);
 }
 
 void ASTUBaseCharacter::OnDeath()
