@@ -19,7 +19,14 @@ void ASTURifleWeapon::FireStop()
 
 void ASTURifleWeapon::MakeShot()
 {
+	Super::MakeShot();
 	check(GetWorld());
+
+	if (IsAmmoEmpty())
+	{
+		FireStop();
+		return;
+	}
 
 	FVector TraceStart, TraceEnd;
 	if (!GetTraceData(TraceStart, TraceEnd)) return;
@@ -41,6 +48,8 @@ void ASTURifleWeapon::MakeShot()
 	{
 		DrawDebugLine(GetWorld(), SocketTransform.GetLocation(), TraceEnd, FColor::Red, false, 5.0f, 0, 3.0f);
 	}
+
+	DecreaseAmmo();
 }
 
 void ASTURifleWeapon::DealDamage(const FHitResult& HitResult)

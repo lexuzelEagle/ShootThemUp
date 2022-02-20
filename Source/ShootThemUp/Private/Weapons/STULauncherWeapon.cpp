@@ -19,8 +19,13 @@ void ASTULauncherWeapon::FireStop()
 void ASTULauncherWeapon::MakeShot()
 {
 	Super::MakeShot();
-
 	check(GetWorld());
+
+	if (IsAmmoEmpty())
+	{
+		FireStop();
+		return;
+	}
 
 	FVector TraceStart, TraceEnd;
 	if (!GetTraceData(TraceStart, TraceEnd)) return;
@@ -40,4 +45,6 @@ void ASTULauncherWeapon::MakeShot()
 	Projectile->SetShotDirection(Direction);
 	Projectile->SetOwner(GetOwner());
 	Projectile->FinishSpawning(SpawnTransform);
+
+	DecreaseAmmo();
 }
