@@ -3,6 +3,17 @@
 
 #include "UI/STUHUD.h"
 #include "Engine/Canvas.h"
+#include "Blueprint/UserWidget.h"
+
+void ASTUHUD::BeginPlay()
+{
+	Super::BeginPlay();
+
+	auto PlayerHudWidget = CreateWidget<UUserWidget>(GetWorld(), PlayerHudWidgetClass);
+	check(PlayerHudWidget);
+
+	PlayerHudWidget->AddToViewport();
+}
 
 void ASTUHUD::DrawHUD()
 {
