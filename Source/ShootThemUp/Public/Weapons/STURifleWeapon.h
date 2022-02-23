@@ -6,9 +6,7 @@
 #include "Weapons/STUBaseWeapon.h"
 #include "STURifleWeapon.generated.h"
 
-/**
- * 
- */
+
 UCLASS()
 class SHOOTTHEMUP_API ASTURifleWeapon : public ASTUBaseWeapon
 {

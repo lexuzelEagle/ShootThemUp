@@ -6,9 +6,7 @@
 #include "GameFramework/DamageType.h"
 #include "IceDamageType.generated.h"
 
-/**
- * 
- */
+
 UCLASS()
 class SHOOTTHEMUP_API UIceDamageType : public UDamageType
 {

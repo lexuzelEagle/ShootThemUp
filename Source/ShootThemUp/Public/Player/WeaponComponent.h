@@ -2,6 +2,8 @@
 
 #pragma once
 
+#include "Dev/STUCoreUtils.h"
+
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "WeaponComponent.generated.h"
@@ -9,17 +11,6 @@
 class ASTUBaseWeapon;
 class ASTUBaseCharacter;
 
-USTRUCT(BlueprintType)
-struct FWeaponData
-{
-	GENERATED_USTRUCT_BODY()
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
-		TSubclassOf<ASTUBaseWeapon> WeaponClass;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon", meta = (EditCondition = "!Infinite"))
-		UAnimMontage* ReloadAnimMontage;
-};
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class SHOOTTHEMUP_API UWeaponComponent : public UActorComponent
@@ -34,6 +25,8 @@ public:
 	void FireStop();
 	void NextWeapon();
 	void Reload();
+
+	bool GetWeaponUIData(FWeaponUIData& UIData) const;
 
 protected:
 

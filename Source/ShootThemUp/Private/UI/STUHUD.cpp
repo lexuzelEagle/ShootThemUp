@@ -18,7 +18,7 @@ void ASTUHUD::BeginPlay()
 void ASTUHUD::DrawHUD()
 {
 	Super::DrawHUD();
-	DrawCrossHair();
+	//DrawCrossHair();
 }
 
 void ASTUHUD::DrawCrossHair()

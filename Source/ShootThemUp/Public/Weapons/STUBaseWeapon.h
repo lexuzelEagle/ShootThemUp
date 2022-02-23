@@ -2,6 +2,8 @@
 
 #pragma once
 
+#include "Dev/STUCoreUtils.h"
+
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "STUBaseWeapon.generated.h"
@@ -10,28 +12,12 @@ DECLARE_MULTICAST_DELEGATE(FOnClipEmptySignature);
 
 class USkeletalMeshComponent;
 
-USTRUCT(BlueprintType)
-struct FAmmoData
-{
-	GENERATED_USTRUCT_BODY()
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
-		int32 Bullets;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon", meta = (EditCondition = "!Infinite"))
-		int32 Clips;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
-		bool Infinite;
-};
-
 UCLASS()
 class SHOOTTHEMUP_API ASTUBaseWeapon : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
-	// Sets default values for this actor's properties
 	ASTUBaseWeapon();
 
 	virtual void FireStart();
@@ -41,8 +27,9 @@ public:
 	FOnClipEmptySignature OnClipEmpty;
 	bool CanReload() const;
 
+	FWeaponUIData GetUIData() const { return UIData; };
+
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
@@ -59,6 +46,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
 		FAmmoData DefaultAmmo{ 15, 10, false };
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
+		FWeaponUIData UIData;
 
 	virtual void MakeShot();
 	bool GetTraceData(FVector& TraceStart, FVector& TraceEnd);

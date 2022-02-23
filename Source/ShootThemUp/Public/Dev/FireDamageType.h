@@ -6,9 +6,7 @@
 #include "GameFramework/DamageType.h"
 #include "FireDamageType.generated.h"
 
-/**
- * 
- */
+
 UCLASS()
 class SHOOTTHEMUP_API UFireDamageType : public UDamageType
 {
