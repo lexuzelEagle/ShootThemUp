@@ -168,6 +168,16 @@ bool UWeaponComponent::GetWeaponUIData(FWeaponUIData& UIData) const
 	return false;
 }
 
+bool UWeaponComponent::GetWeaponAmmoData(FAmmoData& AmmoData) const
+{
+	if (CurrentWeapon)
+	{
+		AmmoData = CurrentWeapon->GetAmmoData();
+		return true;
+	}
+	return false;
+}
+
 void UWeaponComponent::PlayAnimMontage(UAnimMontage* Animation)
 {
 	check(Character);

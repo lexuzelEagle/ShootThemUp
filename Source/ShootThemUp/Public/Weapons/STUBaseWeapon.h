@@ -27,7 +27,8 @@ public:
 	FOnClipEmptySignature OnClipEmpty;
 	bool CanReload() const;
 
-	FWeaponUIData GetUIData() const { return UIData; };
+	FWeaponUIData GetUIData() const { return UIData; }
+	FAmmoData GetAmmoData() const { return CurrentAmmo; }
 
 protected:
 	virtual void BeginPlay() override;
