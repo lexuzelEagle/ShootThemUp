@@ -7,14 +7,26 @@
 
 float USTUPlayerHudWidget::GetHealthPercent() const
 {
-	const auto Player = GetOwningPlayerPawn();
-	if (!Player) return 0.0f;
-
-	const auto Component = Player->GetComponentByClass(USTUHealthComponent::StaticClass());
-	const auto HealthComponent = Cast<USTUHealthComponent>(Component);
-	if (!HealthComponent) return 0.0f;
+	const auto HealthComponent = GetHealthComponent();
+	if (!HealthComponent) return false;
 
 	return HealthComponent->GetHealthPercent();
+}
+
+bool USTUPlayerHudWidget::IsPlayerAlive() const
+{
+	const auto HealthComponent = GetHealthComponent();
+	if (!HealthComponent) return false;
+
+	return !HealthComponent->IsDead();
+}
+
+bool USTUPlayerHudWidget::IsPlayerSpectating() const
+{
+	const auto Controller = GetOwningPlayer();
+	if (!Controller) return false;
+
+	return Controller->GetStateName() == NAME_Spectating;
 }
 
 bool USTUPlayerHudWidget::GetWeaponUIData(FWeaponUIData& UIData) const
@@ -41,4 +53,14 @@ UWeaponComponent* USTUPlayerHudWidget::GetWeaponComponent() const
 	const auto Component = Player->GetComponentByClass(UWeaponComponent::StaticClass());
 	const auto WeaponComponent = Cast<UWeaponComponent>(Component);
 	return WeaponComponent;
+}
+
+USTUHealthComponent* USTUPlayerHudWidget::GetHealthComponent() const
+{
+	const auto Player = GetOwningPlayerPawn();
+	if (!Player) return nullptr;
+
+	const auto Component = Player->GetComponentByClass(USTUHealthComponent::StaticClass());
+	const auto HealthComponent = Cast<USTUHealthComponent>(Component);
+	return HealthComponent;
 }

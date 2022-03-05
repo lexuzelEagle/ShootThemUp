@@ -9,6 +9,7 @@
 #include "STUPlayerHudWidget.generated.h"
 
 class UWeaponComponent;
+class USTUHealthComponent;
 
 UCLASS()
 class SHOOTTHEMUP_API USTUPlayerHudWidget : public UUserWidget
@@ -25,7 +26,13 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "UI")
 	bool GetWeaponAmmoData(FAmmoData& AmmoData) const;
 
-private:
+	UFUNCTION(BlueprintCallable, Category = "UI")
+	bool IsPlayerAlive() const;
 
+	UFUNCTION(BlueprintCallable, Category = "UI")
+	bool IsPlayerSpectating() const;
+
+private:
 	UWeaponComponent* GetWeaponComponent() const;
+	USTUHealthComponent* GetHealthComponent() const;
 };

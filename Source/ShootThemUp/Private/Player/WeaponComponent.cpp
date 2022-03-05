@@ -129,6 +129,7 @@ void UWeaponComponent::OnReloadFinished(USkeletalMeshComponent* MeshComponent)
 {
 	if (Character->GetMesh() == MeshComponent)
 	{
+		CurrentWeapon->ChangeClip();
 		ReloadAnimationInProgress = false;
 		UE_LOG(LogWeaponComponent, Display, TEXT("Reload finished!"));
 	}
@@ -210,7 +211,7 @@ void UWeaponComponent::ChangeClip()
 	if (!CanReload()) return;
 
 	CurrentWeapon->FireStop();
-	CurrentWeapon->ChangeClip();
+//	CurrentWeapon->ChangeClip();
 	ReloadAnimationInProgress = true;
 	PlayAnimMontage(CurrentReloadAnimMontage);
 }
