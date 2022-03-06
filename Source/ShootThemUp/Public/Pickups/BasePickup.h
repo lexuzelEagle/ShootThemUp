@@ -23,7 +23,12 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Pickup")
 		float RespawnTime = 5.0f;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Pickup")
+		float RotationYaw = 5.0f;
+
 	virtual void BeginPlay() override;
+	virtual void Tick(float DeltaTime) override;
+
 	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
 	virtual bool GivePickupTo(APawn* PlayerPawn);
 

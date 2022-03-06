@@ -9,7 +9,7 @@ DEFINE_LOG_CATEGORY_STATIC(LogBasePickup, All, All);
 ABasePickup::ABasePickup()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true;
 
 	CollisionComponent = CreateDefaultSubobject<USphereComponent>("SphereComponent");
 	CollisionComponent->InitSphereRadius(50.0f);
@@ -23,6 +23,12 @@ void ABasePickup::BeginPlay()
 	Super::BeginPlay();
 	
 	check(CollisionComponent);
+}
+
+void ABasePickup::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+	AddActorLocalRotation(FRotator(0.0f, RotationYaw, 0.0f));
 }
 
 void ABasePickup::NotifyActorBeginOverlap(AActor* OtherActor)
