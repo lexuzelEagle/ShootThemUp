@@ -20,6 +20,22 @@ ASTUBaseWeapon::ASTUBaseWeapon()
 	SetRootComponent(WeaponMesh);
 }
 
+bool ASTUBaseWeapon::TryToAddAmmo(int32 Clips)
+{
+	if (IsAmmoFull()) return false;
+
+	UE_LOG(LogBaseWeapon, Display, TEXT("%d Clips were added!"), Clips);
+
+	CurrentAmmo.Clips = FMath::Clamp(CurrentAmmo.Clips + Clips, 0, DefaultAmmo.Clips);
+
+	if (IsClipEmpty())
+	{
+		OnClipEmpty.Broadcast();
+	}
+
+	return true;
+}
+
 // Called when the game starts or when spawned
 void ASTUBaseWeapon::BeginPlay()
 {
@@ -65,7 +81,7 @@ bool ASTUBaseWeapon::GetTraceData(FVector& TraceStart, FVector& TraceEnd)
 
 void ASTUBaseWeapon::DecreaseAmmo()
 {
-	CurrentAmmo.Bullets--;
+	CurrentAmmo.Bullets = FMath::Clamp(CurrentAmmo.Bullets - 1, 0, DefaultAmmo.Bullets);
 	LogAmmo();
 
 	if (IsClipEmpty() && !IsAmmoEmpty())
@@ -78,6 +94,11 @@ void ASTUBaseWeapon::DecreaseAmmo()
 bool ASTUBaseWeapon::IsAmmoEmpty() const
 {
 	return !CurrentAmmo.Infinite && CurrentAmmo.Clips == 0 && IsClipEmpty();
+}
+
+bool ASTUBaseWeapon::IsAmmoFull() const
+{
+	return CurrentAmmo.Infinite || CurrentAmmo.Clips == DefaultAmmo.Clips;
 }
 
 bool ASTUBaseWeapon::IsClipEmpty() const

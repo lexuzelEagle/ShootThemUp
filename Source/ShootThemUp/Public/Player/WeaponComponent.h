@@ -29,6 +29,8 @@ public:
 	bool GetWeaponUIData(FWeaponUIData& UIData) const;
 	bool GetWeaponAmmoData(FAmmoData& AmmoData) const;
 
+	bool TryToAddAmmo(TSubclassOf<ASTUBaseWeapon> WeaponType, int32 ClipsAmount);
+
 protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
@@ -80,22 +82,4 @@ private:
 
 	void OnEmptyClip();
 	void ChangeClip();
-
-	template<typename T>
-	T* FindNotifyByClass(UAnimSequenceBase* Animation)
-	{
-		check(Animation);
-
-		const auto NotifyEvents = Animation->Notifies;
-		for (auto NotifyEvent : NotifyEvents)
-		{
-			auto AnimNotify = Cast<T>(NotifyEvent.Notify);
-			if (AnimNotify)
-			{
-				return AnimNotify;
-			}
-		}
-
-		return nullptr;
-	}
 };

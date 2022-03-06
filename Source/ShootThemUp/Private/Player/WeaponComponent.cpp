@@ -102,7 +102,7 @@ void UWeaponComponent::EquipWeapon(int32 WeaponIndex)
 void UWeaponComponent::InitAnimations()
 {
 
-	auto EquipFinishedNotify = FindNotifyByClass<USTUEquipFinishedAnimNotify>(EquipAnimMontage);
+	auto EquipFinishedNotify = Utils::FindNotifyByClass<USTUEquipFinishedAnimNotify>(EquipAnimMontage);
 	if (EquipFinishedNotify)
 	{
 		EquipFinishedNotify->OnNotified.AddUObject(this, &UWeaponComponent::OnEquipFinished);
@@ -110,7 +110,7 @@ void UWeaponComponent::InitAnimations()
 
 	for (auto OneWeaponData : WeaponData)
 	{
-		auto ReloadFinishedNotify = FindNotifyByClass<USTUReloadFinishedAnimNotify>(OneWeaponData.ReloadAnimMontage);	
+		auto ReloadFinishedNotify = Utils::FindNotifyByClass<USTUReloadFinishedAnimNotify>(OneWeaponData.ReloadAnimMontage);
 		if (!ReloadFinishedNotify) continue;		
 		ReloadFinishedNotify->OnNotified.AddUObject(this, &UWeaponComponent::OnReloadFinished);
 	}
@@ -122,6 +122,9 @@ void UWeaponComponent::OnEquipFinished(USkeletalMeshComponent* MeshComponent)
 	{
 		EquipAnimationInProgress = false;
 		UE_LOG(LogWeaponComponent, Display, TEXT("Equip finished!"));
+
+		if (CurrentWeapon->IsClipEmpty()) Reload();
+
 	}
 }
 
@@ -176,6 +179,19 @@ bool UWeaponComponent::GetWeaponAmmoData(FAmmoData& AmmoData) const
 		AmmoData = CurrentWeapon->GetAmmoData();
 		return true;
 	}
+	return false;
+}
+
+bool UWeaponComponent::TryToAddAmmo(TSubclassOf<ASTUBaseWeapon> WeaponType, int32 ClipsAmount)
+{
+	for (const auto Weapon : Weapons)
+	{
+		if (Weapon && Weapon->IsA(WeaponType))
+		{
+			return Weapon->TryToAddAmmo(ClipsAmount);
+		}
+	}
+
 	return false;
 }
 

@@ -43,3 +43,35 @@ struct FWeaponUIData
 		UTexture2D* CrossHairIcon;
 
 };
+
+class Utils
+{
+public:
+
+	template<typename T>
+	static T* FindNotifyByClass(UAnimSequenceBase* Animation)
+	{
+		check(Animation);
+
+		const auto NotifyEvents = Animation->Notifies;
+		for (auto NotifyEvent : NotifyEvents)
+		{
+			auto AnimNotify = Cast<T>(NotifyEvent.Notify);
+			if (AnimNotify)
+			{
+				return AnimNotify;
+			}
+		}
+
+		return nullptr;
+	}
+
+	template<typename T>
+	static T* GetComponent(APawn* Player)
+	{
+		if (!Player) return nullptr;
+
+		const auto Component = Player->GetComponentByClass(T::StaticClass());
+		return Cast<T>(Component);
+	}
+};

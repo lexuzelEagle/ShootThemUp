@@ -30,6 +30,9 @@ public:
 	FWeaponUIData GetUIData() const { return UIData; }
 	FAmmoData GetAmmoData() const { return CurrentAmmo; }
 
+	bool TryToAddAmmo(int32 Clips);
+	bool IsClipEmpty() const;
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -55,7 +58,7 @@ protected:
 	bool GetTraceData(FVector& TraceStart, FVector& TraceEnd);
 	void DecreaseAmmo();
 	bool IsAmmoEmpty() const;
-	bool IsClipEmpty() const;
+	bool IsAmmoFull() const;
 	void LogAmmo();
 
 private:	
