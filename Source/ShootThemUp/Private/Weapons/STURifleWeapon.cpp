@@ -3,6 +3,18 @@
 
 #include "Weapons/STURifleWeapon.h"
 #include "DrawDebugHelpers.h"
+#include "Weapons/WeaponFXComponent.h"
+
+ASTURifleWeapon::ASTURifleWeapon()
+{
+	WeaponFXComponent = CreateDefaultSubobject<UWeaponFXComponent>("WeaponFXComponent");
+}
+
+void ASTURifleWeapon::BeginPlay()
+{
+	Super::BeginPlay();
+	check(WeaponFXComponent);
+}
 
 void ASTURifleWeapon::FireStart()
 {
@@ -39,8 +51,9 @@ void ASTURifleWeapon::MakeShot()
 
 	if (HitResult.bBlockingHit)
 	{
-		DrawDebugLine(GetWorld(), SocketTransform.GetLocation(), HitResult.ImpactPoint, FColor::Red, false, 5.0f, 0, 3.0f);
-		DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 10.0f, 24, FColor::Blue, false, 5.0f);
+		//DrawDebugLine(GetWorld(), SocketTransform.GetLocation(), HitResult.ImpactPoint, FColor::Red, false, 5.0f, 0, 3.0f);
+		//DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 10.0f, 24, FColor::Blue, false, 5.0f);
+		WeaponFXComponent->PlayImpactFX(HitResult);
 
 		DealDamage(HitResult);
 	}
