@@ -6,6 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "WeaponFXComponent.generated.h"
 
+class UPhysicalMaterial;
 class UNiagaraSystem;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -20,6 +21,9 @@ public:
 
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
-		UNiagaraSystem* Effect;
+		UNiagaraSystem* DefaultEffect;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
+		TMap<UPhysicalMaterial*, UNiagaraSystem*> EffectsMap;
 
 };
