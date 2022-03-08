@@ -32,6 +32,22 @@ bool USTUPlayerHudWidget::IsPlayerSpectating() const
 	return Controller->GetStateName() == NAME_Spectating;
 }
 
+bool USTUPlayerHudWidget::Initialize()
+{
+	const auto HealthComponent = Utils::GetComponent<USTUHealthComponent>(GetOwningPlayerPawn());
+	if (HealthComponent)
+	{
+		HealthComponent->OnHealthChanged.AddUObject(this, &USTUPlayerHudWidget::OnHealthChanged);
+	}
+
+	return Super::Initialize();
+}
+
+void USTUPlayerHudWidget::OnHealthChanged(float Health, float HealthDelta)
+{
+	if (HealthDelta < 0.0f) OnTakeDamage();
+}
+
 bool USTUPlayerHudWidget::GetWeaponUIData(FWeaponUIData& UIData) const
 {
 	const auto Player = GetOwningPlayerPawn();

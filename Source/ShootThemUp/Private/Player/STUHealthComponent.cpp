@@ -3,6 +3,8 @@
 
 #include "Player/STUHealthComponent.h"
 #include "GameFramework/Actor.h"
+#include "GameFramework/Pawn.h"
+#include "GameFramework/Controller.h"
 #include "Dev/FireDamageType.h"
 #include "Dev/IceDamageType.h"
 #include "Engine/World.h"
@@ -63,6 +65,8 @@ void USTUHealthComponent::OnTakeDamage(AActor* DamagedActor, float Damage, const
 
 	UE_LOG(LogHealthComponent, Display, TEXT("Taken Damage = %.1f"), Damage);
 
+	PlayCameraShake();
+
 	if (DamageType)
 	{
 		if (DamageType->IsA<UFireDamageType>())
@@ -88,7 +92,23 @@ void USTUHealthComponent::HealUpdate()
 
 void USTUHealthComponent::SetHealth(float NewHealth)
 {
-	Health = FMath::Clamp(NewHealth, 0.0f, MaxHealth);
-	OnHealthChanged.Broadcast(Health);
+	const auto NextHealth = FMath::Clamp(NewHealth, 0.0f, MaxHealth);
+	const auto HealthDelta = NextHealth - Health;
+
+	Health = NextHealth;
+	OnHealthChanged.Broadcast(Health, HealthDelta);
+}
+
+void USTUHealthComponent::PlayCameraShake()
+{
+	if (IsDead()) return;
+
+	const auto Player = Cast<APawn>(GetOwner());
+	if (!Player) return;
+
+	const auto Controller = Player->GetController<APlayerController>();
+	if (!Controller || !Controller->PlayerCameraManager) return;
+
+	Controller->PlayerCameraManager->StartCameraShake(CameraShake);
 }
 
