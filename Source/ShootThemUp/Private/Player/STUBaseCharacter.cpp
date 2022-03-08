@@ -122,7 +122,7 @@ void ASTUBaseCharacter::OnDeath()
 {
 	UE_LOG(LogSTUBaseCharacter, Error, TEXT("Character %s is DEAD!"), *GetName());
 
-	PlayAnimMontage(DeathAnimMontage);
+//	PlayAnimMontage(DeathAnimMontage);
 	GetCharacterMovement()->DisableMovement();
 
 	SetLifeSpan(5.0f);
@@ -133,6 +133,9 @@ void ASTUBaseCharacter::OnDeath()
 	{
 		Controller->ChangeState(NAME_Spectating);
 	}
+
+	GetMesh()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	GetMesh()->SetSimulatePhysics(true);
 }
 
 void ASTUBaseCharacter::OnHealthChanged(float Health)
