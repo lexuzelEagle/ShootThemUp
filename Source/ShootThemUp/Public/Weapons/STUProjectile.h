@@ -31,7 +31,7 @@ protected:
 		float DamageRadius = 200.0f;
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
-		float DamageAmount = 50.0f;
+		float DamageAmount = 120.0f;
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
 		bool DoFullDamage = false;

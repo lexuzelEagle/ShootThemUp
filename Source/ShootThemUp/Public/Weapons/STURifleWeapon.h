@@ -26,7 +26,7 @@ protected:
 		float TimeBetweenShots = 0.1f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-		float WeaponDamage = 2.0f;
+		float WeaponDamage = 10.0f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
 		UNiagaraSystem* TraceFX;
