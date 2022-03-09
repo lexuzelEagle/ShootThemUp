@@ -11,6 +11,8 @@
 DECLARE_MULTICAST_DELEGATE(FOnClipEmptySignature);
 
 class USkeletalMeshComponent;
+class UNiagaraSystem;
+class UNiagaraComponent;
 
 UCLASS()
 class SHOOTTHEMUP_API ASTUBaseWeapon : public AActor
@@ -54,12 +56,17 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
 		FWeaponUIData UIData;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
+		UNiagaraSystem* MuzzleFX;
+
 	virtual void MakeShot();
 	bool GetTraceData(FVector& TraceStart, FVector& TraceEnd);
 	void DecreaseAmmo();
 	bool IsAmmoEmpty() const;
 	bool IsAmmoFull() const;
 	void LogAmmo();
+
+	UNiagaraComponent* SpawnMuzzleFX();
 
 private:	
 	FAmmoData CurrentAmmo;
