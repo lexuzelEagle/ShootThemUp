@@ -6,7 +6,6 @@
 
 AAICharacter::AAICharacter(const FObjectInitializer& ObjInit)
 {
-	Super(ObjInit);
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 	AIControllerClass = ASTUAIController::StaticClass();
 }
