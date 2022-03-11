@@ -103,7 +103,7 @@ public:
 	}
 
 	template<typename T>
-	static T* GetComponent(APawn* Player)
+	static T* GetComponent(AActor* Player)
 	{
 		if (!Player) return nullptr;
 
