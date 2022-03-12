@@ -18,7 +18,7 @@ class SHOOTTHEMUP_API ASTUBaseCharacter : public ACharacter
 	GENERATED_BODY()
 
 public:
-	ASTUBaseCharacter();
+	ASTUBaseCharacter(const FObjectInitializer& ObjInit);
 
 	UFUNCTION(BlueprintCallable)
 	bool IsRunning() const { return IsAboutToRun && !GetVelocity().IsZero(); };

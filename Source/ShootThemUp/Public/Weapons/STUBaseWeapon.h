@@ -34,6 +34,7 @@ public:
 
 	bool TryToAddAmmo(int32 Clips);
 	bool IsClipEmpty() const;
+	bool IsAmmoEmpty() const;
 
 protected:
 	virtual void BeginPlay() override;
@@ -62,7 +63,6 @@ protected:
 	virtual void MakeShot();
 	bool GetTraceData(FVector& TraceStart, FVector& TraceEnd);
 	void DecreaseAmmo();
-	bool IsAmmoEmpty() const;
 	bool IsAmmoFull() const;
 	void LogAmmo();
 
