@@ -64,12 +64,19 @@ bool ASTUBaseWeapon::GetTraceData(FVector& TraceStart, FVector& TraceEnd)
 	const auto Player = Cast<ACharacter>(GetOwner());
 	check(Player);
 
-	const auto Controller = Player->GetController<APlayerController>();
-	check(Controller);
-
 	FVector ViewLocation;
 	FRotator ViewRotation;
-	Controller->GetPlayerViewPoint(ViewLocation, ViewRotation);
+	if (Player->IsPlayerControlled())
+	{
+		const auto Controller = Player->GetController<APlayerController>();
+		check(Controller);
+		Controller->GetPlayerViewPoint(ViewLocation, ViewRotation);
+	}
+	else
+	{
+		ViewLocation = WeaponMesh->GetSocketLocation(MuzzleSocketName);
+		ViewRotation = WeaponMesh->GetSocketRotation(MuzzleSocketName);
+	}
 
 	TraceStart = ViewLocation;
 
