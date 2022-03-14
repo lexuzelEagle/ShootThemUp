@@ -16,6 +16,8 @@ class SHOOTTHEMUP_API ABasePickup : public AActor
 public:	
 	ABasePickup();
 
+	bool CouldBeTaken() const;
+
 protected:
 	UPROPERTY(VisibleAnywhere, Category = "Pickup")
 		USphereComponent* CollisionComponent;
@@ -33,6 +35,8 @@ protected:
 	virtual bool GivePickupTo(APawn* PlayerPawn);
 
 private:
+	FTimerHandle RespawnTimerHandle;
+
 	void PickupWasTaken();
 	void Respawn();
 

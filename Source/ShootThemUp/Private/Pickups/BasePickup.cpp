@@ -55,7 +55,6 @@ void ABasePickup::PickupWasTaken()
 		GetRootComponent()->SetVisibility(false, true);
 	}
 
-	FTimerHandle RespawnTimerHandle;
 	GetWorldTimerManager().SetTimer(RespawnTimerHandle, this, &ABasePickup::Respawn, RespawnTime);
 }
 
@@ -66,5 +65,10 @@ void ABasePickup::Respawn()
 	{
 		GetRootComponent()->SetVisibility(true, true);
 	}
+}
+
+bool ABasePickup::CouldBeTaken() const
+{
+	return !GetWorldTimerManager().IsTimerActive(RespawnTimerHandle);
 }
 
