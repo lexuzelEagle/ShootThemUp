@@ -35,6 +35,7 @@ public:
 	bool TryToAddAmmo(int32 Clips);
 	bool IsClipEmpty() const;
 	bool IsAmmoEmpty() const;
+	bool IsAmmoFull() const;
 
 protected:
 	virtual void BeginPlay() override;
@@ -63,7 +64,6 @@ protected:
 	virtual void MakeShot();
 	bool GetTraceData(FVector& TraceStart, FVector& TraceEnd);
 	void DecreaseAmmo();
-	bool IsAmmoFull() const;
 	void LogAmmo();
 
 	UNiagaraComponent* SpawnMuzzleFX();

@@ -182,18 +182,6 @@ bool UWeaponComponent::GetWeaponAmmoData(FAmmoData& AmmoData) const
 	return false;
 }
 
-bool UWeaponComponent::TryToAddAmmo(TSubclassOf<ASTUBaseWeapon> WeaponType, int32 ClipsAmount)
-{
-	for (const auto Weapon : Weapons)
-	{
-		if (Weapon && Weapon->IsA(WeaponType))
-		{
-			return Weapon->TryToAddAmmo(ClipsAmount);
-		}
-	}
-
-	return false;
-}
 
 void UWeaponComponent::PlayAnimMontage(UAnimMontage* Animation)
 {
@@ -230,4 +218,30 @@ void UWeaponComponent::ChangeClip()
 //	CurrentWeapon->ChangeClip();
 	ReloadAnimationInProgress = true;
 	PlayAnimMontage(CurrentReloadAnimMontage);
+}
+
+bool UWeaponComponent::TryToAddAmmo(TSubclassOf<ASTUBaseWeapon> WeaponType, int32 ClipsAmount)
+{
+	for (const auto Weapon : Weapons)
+	{
+		if (Weapon && Weapon->IsA(WeaponType))
+		{
+			return Weapon->TryToAddAmmo(ClipsAmount);
+		}
+	}
+
+	return false;
+}
+
+bool UWeaponComponent::NeedAmmo(TSubclassOf<ASTUBaseWeapon> WeaponType) const
+{
+	for (const auto Weapon : Weapons)
+	{
+		if (Weapon && Weapon->IsA(WeaponType))
+		{
+			return !Weapon->IsAmmoFull();
+		}
+	}
+
+	return false;
 }
