@@ -7,6 +7,7 @@
 #include "AIController.h"
 #include "UI/STUHUD.h"
 
+DEFINE_LOG_CATEGORY_STATIC(LogSTUGameModeBase, All, All);
 
 ASTUGameModeBase::ASTUGameModeBase()
 {
@@ -20,6 +21,9 @@ void ASTUGameModeBase::StartPlay()
 	Super::StartPlay();
 
 	SpawnBots();
+
+	CurrentRound = 1;
+	StartRound();
 }
 
 void ASTUGameModeBase::SpawnBots()
@@ -33,6 +37,32 @@ void ASTUGameModeBase::SpawnBots()
 
 		const auto STU_AIController = GetWorld()->SpawnActor<AAIController>(AIControllerClass, SpawnInfo);
 		RestartPlayer(STU_AIController);
+	}
+}
+
+void ASTUGameModeBase::StartRound()
+{
+	RoundCountDown = GameData.RoundTime;
+	GetWorldTimerManager().SetTimer(GameRoundTimerHandle, this, &ASTUGameModeBase::GameTimerUpdate, 1.0f, true);
+}
+
+void ASTUGameModeBase::GameTimerUpdate()
+{
+	UE_LOG(LogSTUGameModeBase, Display, TEXT("Time = %i; Round = %i/%i"), RoundCountDown, CurrentRound, GameData.RoundsNum);
+
+	if (--RoundCountDown == 0)
+	{
+		GetWorldTimerManager().ClearTimer(GameRoundTimerHandle);
+
+		if (CurrentRound + 1 <= GameData.RoundsNum)
+		{
+			++CurrentRound;
+			StartRound();
+		}
+		else
+		{
+			UE_LOG(LogSTUGameModeBase, Display, TEXT("============= GAME OVER ============="));
+		}
 	}
 }
 
