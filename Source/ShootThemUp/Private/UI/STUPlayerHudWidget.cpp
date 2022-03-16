@@ -5,6 +5,8 @@
 #include "Player/STUHealthComponent.h"
 #include "Player/WeaponComponent.h"
 #include "Dev/STUCoreUtils.h"
+#include "STUGameModeBase.h"
+#include "Player/STU_PlayerState.h"
 
 float USTUPlayerHudWidget::GetHealthPercent() const
 {
@@ -64,4 +66,44 @@ bool USTUPlayerHudWidget::GetWeaponAmmoData(FAmmoData& AmmoData) const
 	if (!WeaponComponent) return false;
 
 	return WeaponComponent->GetWeaponAmmoData(AmmoData);
+}
+
+int32 USTUPlayerHudWidget::GetKillsNum() const
+{
+	const auto PlayerState = GetPlayerState();
+	return PlayerState ? PlayerState->GetKillsNum() : -1;
+}
+
+int32 USTUPlayerHudWidget::GetDeathsNum() const
+{
+	const auto PlayerState = GetPlayerState();
+	return PlayerState ? PlayerState->GetDeathsNum() : -1;
+}
+
+int32 USTUPlayerHudWidget::GetCurrentRoundNum() const
+{
+	const auto GameMode = GetGameMode();
+	return GameMode ? GameMode->GetCurrentRound() : -1;
+}
+
+int32 USTUPlayerHudWidget::GetTotalRoundsNum() const
+{
+	const auto GameMode = GetGameMode();
+	return GameMode ? GameMode->GetGameData().RoundsNum : -1;
+}
+
+int32 USTUPlayerHudWidget::GetRoundSecondsRemaining() const
+{
+	const auto GameMode = GetGameMode();
+	return GameMode ? GameMode->GetRoundCountDown() : -1;
+}
+
+ASTUGameModeBase* USTUPlayerHudWidget::GetGameMode() const
+{
+	return GetWorld() ? Cast<ASTUGameModeBase>(GetWorld()->GetAuthGameMode()) : nullptr;
+}
+
+ASTU_PlayerState* USTUPlayerHudWidget::GetPlayerState() const
+{
+	return GetOwningPlayer() ? Cast<ASTU_PlayerState>(GetOwningPlayer()->PlayerState) : nullptr;
 }

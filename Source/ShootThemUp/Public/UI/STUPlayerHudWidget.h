@@ -10,6 +10,8 @@
 
 class UWeaponComponent;
 class USTUHealthComponent;
+class ASTUGameModeBase;
+class ASTU_PlayerState;
 
 UCLASS()
 class SHOOTTHEMUP_API USTUPlayerHudWidget : public UUserWidget
@@ -18,7 +20,7 @@ class SHOOTTHEMUP_API USTUPlayerHudWidget : public UUserWidget
 	
 public:
 	UFUNCTION(BlueprintCallable, Category = "UI")
-		float GetHealthPercent() const;
+	float GetHealthPercent() const;
 
 	UFUNCTION(BlueprintCallable, Category = "UI")
 	bool GetWeaponUIData(FWeaponUIData& UIData) const;
@@ -37,6 +39,25 @@ public:
 
 	virtual bool Initialize() override;
 
+	UFUNCTION(BlueprintCallable, Category = "UI")
+	int32 GetKillsNum() const;
+
+	UFUNCTION(BlueprintCallable, Category = "UI")
+	int32 GetDeathsNum() const;
+
+	UFUNCTION(BlueprintCallable, Category = "UI")
+	int32 GetCurrentRoundNum() const;
+
+	UFUNCTION(BlueprintCallable, Category = "UI")
+	int32 GetTotalRoundsNum() const;
+
+	UFUNCTION(BlueprintCallable, Category = "UI")
+	int32 GetRoundSecondsRemaining() const;
+
 private:
 	void OnHealthChanged(float Health, float HealthDelta);
+
+	ASTUGameModeBase* GetGameMode() const;
+	ASTU_PlayerState* GetPlayerState() const;
+
 };
