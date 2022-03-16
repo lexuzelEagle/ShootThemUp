@@ -48,7 +48,7 @@ void ASTUProjectile::OnProjectileHit(UPrimitiveComponent* HitComponent, AActor* 
 
 	// make damage
 	UGameplayStatics::ApplyRadialDamage(GetWorld(), DamageAmount, GetActorLocation(), DamageRadius, 
-		UDamageType::StaticClass(), {GetOwner()}, this, nullptr, DoFullDamage);
+		UDamageType::StaticClass(), {GetOwner()}, this, GetController(), DoFullDamage);
 
 	WeaponFXComponent->PlayImpactFX(Hit);
 
