@@ -20,4 +20,5 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 		USTU_RespawnComponent* RespawnComponent;
 	
+	virtual void OnPossess(APawn* InPawn) override;
 };

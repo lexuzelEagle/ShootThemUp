@@ -59,5 +59,6 @@ private:
 
 	ASTUGameModeBase* GetGameMode() const;
 	ASTU_PlayerState* GetPlayerState() const;
+	void OnNewPawn(APawn* Pawn);
 
 };
