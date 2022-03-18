@@ -12,7 +12,7 @@
 DEFINE_LOG_CATEGORY_STATIC(LogSTUBaseCharacter, All, All)
 
 // Sets default values
-ASTUBaseCharacter::ASTUBaseCharacter(const FObjectInitializer& ObjInit)
+ASTUBaseCharacter::ASTUBaseCharacter(const FObjectInitializer& ObjInit) : Super(ObjInit)
 {
 	PrimaryActorTick.bCanEverTick = true;
 
