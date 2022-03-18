@@ -26,6 +26,8 @@ public:
 	int32 GetCurrentRound() const { return CurrentRound; }
 	int32 GetRoundCountDown() const { return RoundCountDown; }
 
+	void RespawnRequest(AController* Controller);
+
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Game")
 		TSubclassOf<AAIController> AIControllerClass;
@@ -40,6 +42,8 @@ private:
 	int32 CurrentRound = 1;
 	int32 RoundCountDown = 0;
 	FTimerHandle GameRoundTimerHandle;
+	
+	const int32 MinRoundTimeForRespawn = 10;
 
 	void SpawnBots();
 	void StartRound();
@@ -53,4 +57,5 @@ private:
 	void SetPlayerColor(AController* Controller);
 
 	void LogPlayerInfo();
+	void StartRespawn(AController* Controller);
 };

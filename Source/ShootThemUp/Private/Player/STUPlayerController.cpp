@@ -2,4 +2,10 @@
 
 
 #include "Player/STUPlayerController.h"
+#include "Player/STU_RespawnComponent.h"
 
+
+ASTUPlayerController::ASTUPlayerController()
+{
+	RespawnComponent = CreateDefaultSubobject<USTU_RespawnComponent>("RespawnComponent");
+}
