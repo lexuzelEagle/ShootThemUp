@@ -6,10 +6,7 @@
 #include "GameFramework/Character.h"
 #include "STUBaseCharacter.generated.h"
 
-class UCameraComponent;
-class USpringArmComponent;
 class USTUHealthComponent;
-class UTextRenderComponent;
 class UWeaponComponent;
 
 UCLASS()
@@ -21,13 +18,7 @@ public:
 	ASTUBaseCharacter(const FObjectInitializer& ObjInit);
 
 	UFUNCTION(BlueprintCallable)
-	bool IsRunning() const { return IsAboutToRun && !GetVelocity().IsZero(); };
-
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	virtual bool IsRunning() const { return false; };
 
 	void SetPlayerColor(const FLinearColor& Color);
 
@@ -35,16 +26,7 @@ protected:
 	/* Properies Components */
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
-		USpringArmComponent* SpringArmComponent;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
-		UCameraComponent* CameraComponent;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 		USTUHealthComponent* HealthComponent;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
-		UTextRenderComponent* HealthTextComponent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 		UWeaponComponent* WeaponComponent;
@@ -79,14 +61,6 @@ protected:
 	virtual void OnDeath();
 
 private:
-	float MaxWalkSpeed;
-	bool IsMovingForward = false;
-
-	void MoveForward(float Amount);
-	void MoveRight(float Amount);
-	void RunPressed();
-	void RunReleased();
-
 	void OnHealthChanged(float Health, float HealthDelta);
 
 	UFUNCTION()
