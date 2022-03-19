@@ -12,10 +12,17 @@ void ASTUHUD::BeginPlay()
 {
 	Super::BeginPlay();
 
-	auto PlayerHudWidget = CreateWidget<UUserWidget>(GetWorld(), PlayerHudWidgetClass);
-	check(PlayerHudWidget);
+	GameWidgets.Add(ESTU_MatchState::InProgress, CreateWidget<UUserWidget>(GetWorld(), PlayerHudWidgetClass));
+	GameWidgets.Add(ESTU_MatchState::Pause, CreateWidget<UUserWidget>(GetWorld(), PauseWidgetClass));
 
-	PlayerHudWidget->AddToViewport();
+	for (auto GameWidgetPair : GameWidgets)
+	{
+		const auto GameWidget = GameWidgetPair.Value;
+		if (!GameWidget) continue;
+
+		GameWidget->AddToViewport();
+		GameWidget->SetVisibility(ESlateVisibility::Hidden);
+	}
 
 	if (GetWorld())
 	{
@@ -45,5 +52,20 @@ void ASTUHUD::DrawCrossHair()
 
 void ASTUHUD::OnMatchStateChanged(ESTU_MatchState State)
 {
+	if (CurrentWidget)
+	{
+		CurrentWidget->SetVisibility(ESlateVisibility::Hidden);
+	}
+
+	if (GameWidgets.Contains(State))
+	{
+		CurrentWidget = GameWidgets[State];
+	}
+
+	if (CurrentWidget)
+	{
+		CurrentWidget->SetVisibility(ESlateVisibility::Visible);
+	}
+
 	UE_LOG(LogSTUHUD, Display, TEXT("Match State changed: %s"), *UEnum::GetValueAsString(State));
 }
