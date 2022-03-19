@@ -29,6 +29,8 @@ void ASTUGameModeBase::StartPlay()
 
 	CurrentRound = 1;
 	StartRound();
+
+	SetMatchState(ESTU_MatchState::InProgress);
 }
 
 void ASTUGameModeBase::SpawnBots()
@@ -204,4 +206,14 @@ void ASTUGameModeBase::GameOver()
 			Pawn->DisableInput(nullptr);
 		}
 	}
+
+	SetMatchState(ESTU_MatchState::GameOver);
+}
+
+void ASTUGameModeBase::SetMatchState(ESTU_MatchState State)
+{
+	if (MatchState == State) return;
+
+	MatchState = State;
+	OnMatchStateChanged.Broadcast(MatchState);
 }

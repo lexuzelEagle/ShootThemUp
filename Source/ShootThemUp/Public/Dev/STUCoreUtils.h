@@ -148,3 +148,14 @@ public:
 		return PlayerState1 && PlayerState2 && PlayerState1->GetTeamID() != PlayerState2->GetTeamID();
 	}
 };
+
+UENUM(BlueprintType)
+enum class ESTU_MatchState : uint8
+{
+	WaitingToStart = 0,
+	InProgress,
+	Pause,
+	GameOver
+};
+
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnMatchStateChangedSignature, ESTU_MatchState);

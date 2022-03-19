@@ -4,11 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/HUD.h"
+#include "Dev/STUCoreUtils.h"
 #include "STUHUD.generated.h"
 
-/**
- * 
- */
+
 UCLASS()
 class SHOOTTHEMUP_API ASTUHUD : public AHUD
 {
@@ -24,5 +23,5 @@ protected:
 		TSubclassOf<UUserWidget> PlayerHudWidgetClass;
 
 	void DrawCrossHair();
-	
+	void OnMatchStateChanged(ESTU_MatchState State);
 };
