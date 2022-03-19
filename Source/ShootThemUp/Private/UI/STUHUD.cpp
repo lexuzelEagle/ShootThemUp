@@ -14,6 +14,7 @@ void ASTUHUD::BeginPlay()
 
 	GameWidgets.Add(ESTU_MatchState::InProgress, CreateWidget<UUserWidget>(GetWorld(), PlayerHudWidgetClass));
 	GameWidgets.Add(ESTU_MatchState::Pause, CreateWidget<UUserWidget>(GetWorld(), PauseWidgetClass));
+	GameWidgets.Add(ESTU_MatchState::GameOver, CreateWidget<UUserWidget>(GetWorld(), GameOverWidgetClass));
 
 	for (auto GameWidgetPair : GameWidgets)
 	{

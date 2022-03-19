@@ -25,6 +25,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
 		TSubclassOf<UUserWidget> PauseWidgetClass;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
+		TSubclassOf<UUserWidget> GameOverWidgetClass;
+
 private:
 	UPROPERTY()
 		TMap<ESTU_MatchState, UUserWidget*> GameWidgets;
