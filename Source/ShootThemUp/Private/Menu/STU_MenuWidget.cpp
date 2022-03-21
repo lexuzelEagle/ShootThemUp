@@ -4,6 +4,9 @@
 #include "Menu/STU_MenuWidget.h"
 #include "Components/Button.h"
 #include "Kismet/GameplayStatics.h"
+#include "STU_GameInstance.h"
+
+DEFINE_LOG_CATEGORY_STATIC(LogMenuWidget, All, All);
 
 void USTU_MenuWidget::NativeOnInitialized()
 {
@@ -17,6 +20,17 @@ void USTU_MenuWidget::NativeOnInitialized()
 
 void USTU_MenuWidget::OnStartGame()
 {
-	const FName StartupLevelName = "TestLevel";
-	UGameplayStatics::OpenLevel(this, StartupLevelName);
+	if (!GetWorld()) return;
+
+	const auto STUGameInstance = GetWorld()->GetGameInstance<USTU_GameInstance>();
+	if (!STUGameInstance) return;
+
+	const auto StartupLevelName = STUGameInstance->GetStartupLevelName();
+	if (StartupLevelName.IsNone())
+	{
+		UE_LOG(LogMenuWidget, Error, TEXT("Startup level is NONE!"));
+		return;
+	}
+
+	UGameplayStatics::OpenLevel(GetWorld(), StartupLevelName);
 }
