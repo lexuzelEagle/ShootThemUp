@@ -8,6 +8,7 @@
 #include "Components/VerticalBox.h"
 #include "Components/Button.h"
 #include "Kismet/GameplayStatics.h"
+#include "STU_GameInstance.h"
 
 
 void USTU_GameOverWidget::NativeOnInitialized()
@@ -26,6 +27,11 @@ void USTU_GameOverWidget::NativeOnInitialized()
 	if (ResetLvlButton)
 	{
 		ResetLvlButton->OnClicked.AddDynamic(this, &USTU_GameOverWidget::OnResetLvl);
+	}
+
+	if (MainMenuButton)
+	{
+		MainMenuButton->OnClicked.AddDynamic(this, &USTU_GameOverWidget::OnMainMenu);
 	}
 }
 
@@ -71,4 +77,17 @@ void USTU_GameOverWidget::OnResetLvl()
 
 	const auto CurrentLvlName = UGameplayStatics::GetCurrentLevelName(GetWorld());
 	UGameplayStatics::OpenLevel(GetWorld(), FName(CurrentLvlName));
+}
+
+void USTU_GameOverWidget::OnMainMenu()
+{
+	if (!GetWorld()) return;
+
+	const auto STUGameInstance = GetWorld()->GetGameInstance<USTU_GameInstance>();
+	if (!STUGameInstance) return;
+
+	const auto MenuLevelName = STUGameInstance->GetMenuLevelName();
+	if (MenuLevelName.IsNone()) return;
+
+	UGameplayStatics::OpenLevel(GetWorld(), MenuLevelName);
 }

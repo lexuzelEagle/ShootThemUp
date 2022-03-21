@@ -25,6 +25,9 @@ protected:
 	UPROPERTY(meta = (BindWidget))
 		UButton* ResetLvlButton;
 
+	UPROPERTY(meta = (BindWidget))
+		UButton* MainMenuButton;
+
 	virtual void NativeOnInitialized() override;
 private:
 	void OnMatchStateChanged(ESTU_MatchState State);
@@ -32,4 +35,7 @@ private:
 
 	UFUNCTION()
 		void OnResetLvl();
+
+	UFUNCTION()
+		void OnMainMenu();
 };

@@ -14,7 +14,12 @@ class SHOOTTHEMUP_API USTU_GameInstance : public UGameInstance
 	
 public:
 	FName GetStartupLevelName() const { return StartupLevelName; }
+	FName GetMenuLevelName() const { return MenuLevelName; }
+
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Game")
-		FName StartupLevelName = NAME_None;
+		FName StartupLevelName = "TestLevel";
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Game")
+		FName MenuLevelName = "MenuLevel";
 };
