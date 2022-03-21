@@ -8,15 +8,13 @@
 #include "STU_GameOverWidget.generated.h"
 
 class UVerticalBox;
+class UButton;
 
 UCLASS()
 class SHOOTTHEMUP_API USTU_GameOverWidget : public UUserWidget
 {
 	GENERATED_BODY()
 	
-public:
-	virtual bool Initialize() override;
-
 protected:
 	UPROPERTY(meta = (BindWidget))
 		UVerticalBox* PlayerStatBox;
@@ -24,7 +22,14 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
 		TSubclassOf<UUserWidget> PlayerStatRowWidgetClass;
 
+	UPROPERTY(meta = (BindWidget))
+		UButton* ResetLvlButton;
+
+	virtual void NativeOnInitialized() override;
 private:
 	void OnMatchStateChanged(ESTU_MatchState State);
 	void UpdatePlayerStat();
+
+	UFUNCTION()
+		void OnResetLvl();
 };

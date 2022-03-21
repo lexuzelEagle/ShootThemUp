@@ -37,8 +37,6 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, Category = "UI")
 	void OnTakeDamage();
 
-	virtual bool Initialize() override;
-
 	UFUNCTION(BlueprintCallable, Category = "UI")
 	int32 GetKillsNum() const;
 
@@ -53,6 +51,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "UI")
 	int32 GetRoundSecondsRemaining() const;
+
+protected:
+	virtual void NativeOnInitialized() override;
 
 private:
 	void OnHealthChanged(float Health, float HealthDelta);
