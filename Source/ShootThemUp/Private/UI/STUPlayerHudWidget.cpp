@@ -7,6 +7,7 @@
 #include "Dev/STUCoreUtils.h"
 #include "STUGameModeBase.h"
 #include "Player/STU_PlayerState.h"
+#include "Components/ProgressBar.h"
 
 float USTUPlayerHudWidget::GetHealthPercent() const
 {
@@ -48,6 +49,8 @@ void USTUPlayerHudWidget::NativeOnInitialized()
 void USTUPlayerHudWidget::OnHealthChanged(float Health, float HealthDelta)
 {
 	if (HealthDelta < 0.0f) OnTakeDamage();
+
+	UpdateHealthBar();
 }
 
 bool USTUPlayerHudWidget::GetWeaponUIData(FWeaponUIData& UIData) const
@@ -114,5 +117,14 @@ void USTUPlayerHudWidget::OnNewPawn(APawn* Pawn)
 	if (HealthComponent && !HealthComponent->OnHealthChanged.IsBoundToObject(this))
 	{
 		HealthComponent->OnHealthChanged.AddUObject(this, &USTUPlayerHudWidget::OnHealthChanged);
+	}
+	UpdateHealthBar();
+}
+
+void USTUPlayerHudWidget::UpdateHealthBar()
+{
+	if (HealthProgressBar)
+	{
+		HealthProgressBar->SetFillColorAndOpacity(GetHealthPercent() > PercentColorThreshold ? GoodColor : BadColor);
 	}
 }

@@ -12,6 +12,7 @@ class UWeaponComponent;
 class USTUHealthComponent;
 class ASTUGameModeBase;
 class ASTU_PlayerState;
+class UProgressBar;
 
 UCLASS()
 class SHOOTTHEMUP_API USTUPlayerHudWidget : public UUserWidget
@@ -53,6 +54,18 @@ public:
 	int32 GetRoundSecondsRemaining() const;
 
 protected:
+	UPROPERTY(meta = (BindWidget))
+		UProgressBar* HealthProgressBar;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
+		float PercentColorThreshold = 0.3f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
+		FLinearColor GoodColor = FLinearColor::White;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
+		FLinearColor BadColor = FLinearColor::Red;
+
 	virtual void NativeOnInitialized() override;
 
 private:
@@ -61,5 +74,5 @@ private:
 	ASTUGameModeBase* GetGameMode() const;
 	ASTU_PlayerState* GetPlayerState() const;
 	void OnNewPawn(APawn* Pawn);
-
+	void UpdateHealthBar();
 };
