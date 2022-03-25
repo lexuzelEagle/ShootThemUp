@@ -3,7 +3,7 @@
 
 #include "UI/STUHUD.h"
 #include "Engine/Canvas.h"
-#include "Blueprint/UserWidget.h"
+#include "UI/STU_BaseWidget.h"
 #include "STUGameModeBase.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogSTUHUD, All, All);
@@ -12,9 +12,9 @@ void ASTUHUD::BeginPlay()
 {
 	Super::BeginPlay();
 
-	GameWidgets.Add(ESTU_MatchState::InProgress, CreateWidget<UUserWidget>(GetWorld(), PlayerHudWidgetClass));
-	GameWidgets.Add(ESTU_MatchState::Pause, CreateWidget<UUserWidget>(GetWorld(), PauseWidgetClass));
-	GameWidgets.Add(ESTU_MatchState::GameOver, CreateWidget<UUserWidget>(GetWorld(), GameOverWidgetClass));
+	GameWidgets.Add(ESTU_MatchState::InProgress, CreateWidget<USTU_BaseWidget>(GetWorld(), PlayerHudWidgetClass));
+	GameWidgets.Add(ESTU_MatchState::Pause, CreateWidget<USTU_BaseWidget>(GetWorld(), PauseWidgetClass));
+	GameWidgets.Add(ESTU_MatchState::GameOver, CreateWidget<USTU_BaseWidget>(GetWorld(), GameOverWidgetClass));
 
 	for (auto GameWidgetPair : GameWidgets)
 	{
@@ -66,6 +66,7 @@ void ASTUHUD::OnMatchStateChanged(ESTU_MatchState State)
 	if (CurrentWidget)
 	{
 		CurrentWidget->SetVisibility(ESlateVisibility::Visible);
+		CurrentWidget->Show();
 	}
 
 	UE_LOG(LogSTUHUD, Display, TEXT("Match State changed: %s"), *UEnum::GetValueAsString(State));

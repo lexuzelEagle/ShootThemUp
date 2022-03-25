@@ -7,6 +7,7 @@
 #include "Dev/STUCoreUtils.h"
 #include "STUHUD.generated.h"
 
+class USTU_BaseWidget;
 
 UCLASS()
 class SHOOTTHEMUP_API ASTUHUD : public AHUD
@@ -30,10 +31,10 @@ protected:
 
 private:
 	UPROPERTY()
-		TMap<ESTU_MatchState, UUserWidget*> GameWidgets;
+		TMap<ESTU_MatchState, USTU_BaseWidget*> GameWidgets;
 
 	UPROPERTY()
-		UUserWidget* CurrentWidget = nullptr;
+		USTU_BaseWidget* CurrentWidget = nullptr;
 
 	void DrawCrossHair();
 	void OnMatchStateChanged(ESTU_MatchState State);

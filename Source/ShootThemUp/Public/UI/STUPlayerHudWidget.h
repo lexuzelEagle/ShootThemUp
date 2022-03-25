@@ -6,6 +6,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "UI/STU_BaseWidget.h"
 #include "STUPlayerHudWidget.generated.h"
 
 class UWeaponComponent;
@@ -15,7 +16,7 @@ class ASTU_PlayerState;
 class UProgressBar;
 
 UCLASS()
-class SHOOTTHEMUP_API USTUPlayerHudWidget : public UUserWidget
+class SHOOTTHEMUP_API USTUPlayerHudWidget : public USTU_BaseWidget
 {
 	GENERATED_BODY()
 	
@@ -56,6 +57,9 @@ public:
 protected:
 	UPROPERTY(meta = (BindWidget))
 		UProgressBar* HealthProgressBar;
+
+	UPROPERTY(meta = (BindWidgetAnim), Transient)
+		UWidgetAnimation* DamageAnimation;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
 		float PercentColorThreshold = 0.3f;

@@ -5,13 +5,14 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Dev/STUCoreUtils.h"
+#include "UI/STU_BaseWidget.h"
 #include "STU_GameOverWidget.generated.h"
 
 class UVerticalBox;
 class UButton;
 
 UCLASS()
-class SHOOTTHEMUP_API USTU_GameOverWidget : public UUserWidget
+class SHOOTTHEMUP_API USTU_GameOverWidget : public USTU_BaseWidget
 {
 	GENERATED_BODY()
 	

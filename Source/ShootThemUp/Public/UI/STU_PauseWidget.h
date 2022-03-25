@@ -4,12 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "UI/STU_BaseWidget.h"
 #include "STU_PauseWidget.generated.h"
 
 class UButton;
 
 UCLASS()
-class SHOOTTHEMUP_API USTU_PauseWidget : public UUserWidget
+class SHOOTTHEMUP_API USTU_PauseWidget : public USTU_BaseWidget
 {
 	GENERATED_BODY()
 

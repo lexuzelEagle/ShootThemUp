@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Dev/STUCoreUtils.h"
+#include "UI/STU_BaseWidget.h"
 #include "STU_MenuWidget.generated.h"
 
 
@@ -14,7 +15,7 @@ class USTU_GameInstance;
 class USTU_LevelItemWidget;
 
 UCLASS()
-class SHOOTTHEMUP_API USTU_MenuWidget : public UUserWidget
+class SHOOTTHEMUP_API USTU_MenuWidget : public USTU_BaseWidget
 {
 	GENERATED_BODY()
 
